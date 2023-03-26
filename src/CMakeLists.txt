@@ -11,6 +11,10 @@ add_executable(runServer server.cpp)
 # runs generators
 add_executable(runGenerator generator.cpp)
 
+# add thread specific libs
+find_package(Threads)
+target_link_libraries(runGenerator ${CMAKE_THREAD_LIBS_INIT})
+
 add_subdirectory(Common)
 
 # get server class from folder
