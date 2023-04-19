@@ -26,13 +26,8 @@ void makeGenerator(std::ostream &ostream, arg_t a, arg_t b, func_t func){
     ostream << result.fullReport();
 }
 
-//typename std::enable_if<std::is_integral_v<arg_t>, arg_t>
-//makeArg(){
-//    return rand() % std::numeric_limits<arg_t>::max();
-//}
-
 arg_t makeArg(){
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX / 10e10);
+    return static_cast<double>(rand()) / static_cast<double>(RAND_MAX / 10e10);
 }
 
 func_t makeFunc(){

@@ -31,8 +31,8 @@ std::function<arg_t(arg_t, arg_t)> Request::getFunction() const {
             };
         }
         case '/': {
-            if(enableDelay) std::this_thread::sleep_for(std::chrono::milliseconds(900));
             return [](arg_t a_, arg_t b_) -> arg_t {
+                if(enableDelay) std::this_thread::sleep_for(std::chrono::milliseconds(900));
                 return a_ / b_;
             };
         }

@@ -6,16 +6,38 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <cstdio>
+#include <unordered_map>
 
 #include "ThreadPool.h"
 
 class Server {
 private:
-    ThreadPool *threadPool;
-    int fd;
-    sockaddr_in addrIn;
+    struct Storing{
+        decltype(std::chrono::steady_clock::now()) initTime;
+        Request request;
+        int socketFd;
+
+        Storing(decltype(std::chrono::steady_clock::now()) initTime_, Request request_, int socketFd_) :
+            initTime(initTime_),
+            request(request_),
+            socketFd(socketFd_) {}
+    };
+
+    using storing_t = Storing;
+
+    ThreadPool *threadPool; // threads
+
+    int fd; // server's socket
+    sockaddr_in addrIn; // somewhat address
+
+    std::unordered_map<task_id_t, storing_t> runningTasks; // should be processed by one help thread
+    std::mutex runningTasksMtx;
+
+    std::thread *sendingThread;
+    std::atomic<bool> stopSending = false;
 
     void configureSocket();
+    void sendResults();
 public:
     explicit Server(size_t poolSize);
 
